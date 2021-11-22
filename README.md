@@ -1,6 +1,8 @@
 ﻿# Soil Correction
 
-Esse projeto tem o intuito de integrar o [Front-End](https://github.com/raulval/sa-soilcorrection-gui) com o Back-End, que tem como base o repositório [Soil Correction](https://github.com/raulval/sa-soilcorrection) da disciplina de Arquitetura de Software UTFPR-CP.
+Esse projeto tem o intuito de integrar o [Front-End](https://github.com/raulval/sa-soilcorrection-gui) com o Back-End, que tem como base o repositório [Soil Correction](https://github.com/raulval/sa-soilcorrection) da disciplina de Arquitetura de Software UTFPR-CP. 
+O motivo para usar a arquitetura cliente-servidor foi a flexibilidade, a manutenabilidade e a escalabilidade que essa arquitetura traz.
+
 
 # Tecnologias
 
