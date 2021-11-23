@@ -51,10 +51,13 @@ function dadosReducer(state = INITIAL_STATE, action) {
         magnesio: action.magnesio,
         enxofre: action.enxofre,
         aluminio: action.aluminio,
-        hal: action.hal,
+        hidrogenioAluminio: action.hidrogenioAluminio,
+        mo: action.mo,
         scmol: action.scmol,
         ctccmol: action.ctccmol,
         vatual: action.vatual,
+        moPercentual: action.moPercentual,
+        carbono: action.carbono,
       };
     case "CORRECAO":
       return {

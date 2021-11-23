@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import Header from "../../components/Header";
+import Input from "../../components/Input";
 import "../../styles/correcaoCalcioMg.css";
 
 export function CorrecaoCalcioMg() {
@@ -61,18 +62,13 @@ export function CorrecaoCalcioMg() {
               </Form.Group>
             </Form>
             <Form style={{ marginTop: "20px" }}>
-              <Form.Group className="mb-4" controlId="formBasicNumber">
-                <Form.Label>
-                  Participação do Cálcio na CTC, desejada %
-                </Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Participação desejada na CTC"
-                  value={participacaoDesejadaCal}
-                  onChange={(e) => setParticipacaoDesejadaCal(e.target.value)}
-                  required
-                />
-              </Form.Group>
+              <Input
+                label="Participação do Cálcio na CTC, desejada %"
+                type="number"
+                placeholder="Participação desejada na CTC"
+                value={participacaoDesejadaCal}
+                onChange={(e) => setParticipacaoDesejadaCal(e.target.value)}
+              />
             </Form>
           </Container>
 
@@ -118,43 +114,37 @@ export function CorrecaoCalcioMg() {
 
           <Container className="container-correcao-calmg">
             <Form>
-              <Form.Group className="mb-4" controlId="formBasicNumber">
-                <Form.Label>PRNT %</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="PRNT"
-                  value={prnt}
-                  onChange={(e) => setPRNT(e.target.value)}
-                />
-              </Form.Group>
+              <Input
+                label="PRNT %"
+                type="number"
+                placeholder="PRNT"
+                value={prnt}
+                onChange={(e) => setPRNT(e.target.value)}
+              />
             </Form>
           </Container>
 
           <Container className="container-correcao-calmg">
             <Form>
-              <Form.Group className="mb-4" controlId="formBasicNumber">
-                <Form.Label>Teor de CaO do corretivo %</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Teor de CaO"
-                  value={teorCaO}
-                  onChange={(e) => setTeorCaO(e.target.value)}
-                />
-              </Form.Group>
+              <Input
+                label="Teor de CaO do corretivo %"
+                type="number"
+                placeholder="Teor de CaO"
+                value={teorCaO}
+                onChange={(e) => setTeorCaO(e.target.value)}
+              />
             </Form>
           </Container>
 
           <Container className="container-correcao-calmg">
             <Form>
-              <Form.Group className="mb-4" controlId="formBasicNumber">
-                <Form.Label>Custo da Fonte de Cálcio e Magnésio</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Custo da Fonte R$"
-                  value={custoFonteCalMg}
-                  onChange={(e) => setCustoFonteCalMg(e.target.value)}
-                />
-              </Form.Group>
+              <Input
+                label="Custo da Fonte de Cálcio e Magnésio"
+                type="number"
+                placeholder="Custo da Fonte R$"
+                value={custoFonteCalMg}
+                onChange={(e) => setCustoFonteCalMg(e.target.value)}
+              />
             </Form>
           </Container>
         </Row>

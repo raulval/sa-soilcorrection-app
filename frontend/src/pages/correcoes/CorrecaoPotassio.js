@@ -3,6 +3,7 @@ import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import Header from "../../components/Header";
+import Input from "../../components/Input";
 import "../../styles/correcaoPotassio.css";
 
 export function CorrecaoPotassio() {
@@ -122,18 +123,13 @@ export function CorrecaoPotassio() {
 
           <Container className="container-correcao-potassio">
             <Form>
-              <Form.Group className="mb-4" controlId="formBasicNumber">
-                <Form.Label>
-                  Participação do Potássio na CTC, desejada %
-                </Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Participação desejada na CTC"
-                  value={participacaoDesejadaPot}
-                  onChange={(e) => setParticipacaoDesejadaPot(e.target.value)}
-                  required
-                />
-              </Form.Group>
+              <Input
+                label="Participação do Potássio na CTC, desejada %"
+                type="number"
+                placeholder="Participação desejada na CTC"
+                value={participacaoDesejadaPot}
+                onChange={(e) => setParticipacaoDesejadaPot(e.target.value)}
+              />
               <span>Participação ideal do Potássio na CTC: 3.0%</span>
             </Form>
           </Container>
@@ -158,15 +154,13 @@ export function CorrecaoPotassio() {
 
           <Container className="container-correcao-potassio">
             <Form>
-              <Form.Group className="mb-4" controlId="formBasicNumber">
-                <Form.Label>Custo da Fonte de Potássio</Form.Label>
-                <Form.Control
-                  type="number"
-                  placeholder="Custo da Fonte R$"
-                  value={custoFontePotassio}
-                  onChange={(e) => setCustoFontePotassio(e.target.value)}
-                />
-              </Form.Group>
+              <Input
+                label="Custo da Fonte de Potássio"
+                type="number"
+                placeholder="Custo da Fonte R$"
+                value={custoFontePotassio}
+                onChange={(e) => setCustoFontePotassio(e.target.value)}
+              />
             </Form>
           </Container>
         </Row>
