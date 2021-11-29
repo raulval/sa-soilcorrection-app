@@ -9,6 +9,9 @@ import "../../styles/correcaoFosforo.css";
 export function CorrecaoFosforo() {
   const dispatch = useDispatch();
   const fosforo = useSelector((state) => state.fosforo);
+  const aposCorrecaoPotassio = useSelector(
+    (state) => state.aposCorrecaoPotassio
+  );
 
   const [teorFosforo, setTeorFosforo] = useState();
   const [fonteFosforo, setFonteFosforo] = useState();
@@ -66,6 +69,7 @@ export function CorrecaoFosforo() {
 
     dispatch({
       type: "CORRECAO",
+      aposCorrecaoPotassio: aposCorrecaoPotassio,
       aposCorrecaoFosforo: teorFosforo,
     });
   }

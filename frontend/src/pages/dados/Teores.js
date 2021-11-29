@@ -72,24 +72,24 @@ export function Teores() {
         setVatual(res.data.vatual.toFixed(2));
         setMoPercentual(res.data.mo.toFixed(2));
         setCarbono(res.data.carbono.toFixed(2));
-      });
 
-    dispatch({
-      type: "TEORES",
-      fosforo: fosforo,
-      potassio: potassio,
-      calcio: calcio,
-      magnesio: magnesio,
-      enxofre: enxofre,
-      aluminio: aluminio,
-      hidrogenioAluminio: hidrogenioAluminio,
-      mo: mo,
-      scmol: scmol,
-      ctccmol: ctccmol,
-      vatual: vatual,
-      moPercentual: moPercentual,
-      carbono: carbono,
-    });
+        dispatch({
+          type: "TEORES",
+          fosforo: fosforo,
+          potassio: potassio,
+          calcio: calcio,
+          magnesio: magnesio,
+          enxofre: enxofre,
+          aluminio: aluminio,
+          hidrogenioAluminio: hidrogenioAluminio,
+          mo: mo,
+          scmol: res.data.scmol.toFixed(2),
+          ctccmol: res.data.ctccmol.toFixed(2),
+          vatual: res.data.vatual.toFixed(2),
+          moPercentual: res.data.mo.toFixed(2),
+          carbono: res.data.carbono.toFixed(2),
+        });
+      });
   }
 
   return (
@@ -254,7 +254,7 @@ export function Teores() {
                 <Form.Label>S cmol</Form.Label>
                 <Form.Control
                   value={scmol ? scmol : scmolSalvo}
-                  onChange={(e) => setScmol(e.target.value)}
+                  // onChange={(e) => setScmol(e.target.value)}
                   disabled
                 />
               </Form.Group>
@@ -266,7 +266,7 @@ export function Teores() {
                 <Form.Label>CTC cmol</Form.Label>
                 <Form.Control
                   value={ctccmol ? ctccmol : ctccmolSalvo}
-                  onChange={(e) => setCTCcmol(e.target.value)}
+                  // onChange={(e) => setCTCcmol(e.target.value)}
                   disabled
                 />
               </Form.Group>
@@ -278,7 +278,7 @@ export function Teores() {
                 <Form.Label>V% atual</Form.Label>
                 <Form.Control
                   value={vatual ? vatual : vatualSalvo}
-                  onChange={(e) => setVatual(e.target.value)}
+                  // onChange={(e) => setVatual(e.target.value)}
                   disabled
                 />
               </Form.Group>
@@ -290,7 +290,7 @@ export function Teores() {
                 <Form.Label>M.O. %</Form.Label>
                 <Form.Control
                   value={moPercentual ? moPercentual : moPercentualSalvo}
-                  onChange={(e) => setMoPercentual(e.target.value)}
+                  // onChange={(e) => setMoPercentual(e.target.value)}
                   disabled
                 />
               </Form.Group>
@@ -302,7 +302,7 @@ export function Teores() {
                 <Form.Label>Carbono</Form.Label>
                 <Form.Control
                   value={carbono ? carbono : carbonoSalvo}
-                  onChange={(e) => setCarbono(e.target.value)}
+                  // onChange={(e) => setCarbono(e.target.value)}
                   disabled
                 />
               </Form.Group>

@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,12 +12,11 @@ export function CorrecaoPotassio() {
   const dispatch = useDispatch();
   const potassio = useSelector((state) => state.potassio);
   const ctccmol = useSelector((state) => state.ctccmol);
+  const aposCorrecaoFosforo = useSelector((state) => state.aposCorrecaoFosforo);
 
-  const participacaoAtual = (potassio / (ctccmol * 100))
-    .toExponential(1)
-    .replace(/e\-[0-9]?/, "");
+  const participacaoAtual = ((potassio * 100) / ctccmol).toFixed(2);
 
-  const [participacaoDesejadaPot, setParticipacaoDesejadaPot] = useState();
+  const [participacaoDesejada, setParticipacaoDesejada] = useState();
   const [fontePotassio, setFontePotassio] = useState();
   const [custoFontePotassio, setCustoFontePotassio] = useState();
   const [participacaoApos, setParticipacaoApos] = useState();
@@ -27,76 +27,63 @@ export function CorrecaoPotassio() {
   const [nutrienteA, setNutrienteA] = useState();
   const [nutrienteB, setNutrienteB] = useState();
 
-  const calcularQtdAplicar = (divisor) => {
-    const res = (
-      (((potassio * parseFloat(participacaoDesejadaPot)) /
-        parseFloat(participacaoAtual) -
-        potassio) *
-        39.1 *
-        10 *
-        2 *
-        1.2 *
-        100) /
-      0.85 /
-      divisor
-    ).toFixed(2);
-
-    setQtdAplicar(res);
-  };
-
-  const calcularCustoHa = (divisor) => {
-    const res = (
-      (((((((potassio * parseFloat(participacaoDesejadaPot)) /
-        parseFloat(participacaoAtual) -
-        potassio) *
-        39.1 *
-        10 *
-        2 *
-        1.2 *
-        100) /
-        (85 / 100)) *
-        100) /
-        divisor) *
-        2.42) /
-      1000 /
-      2.42
-    ).toFixed(2);
-    setCustoHa(res);
-  };
-
-  const calcularQtdNutrienteA = (multiplicador) => {
-    const res = (parseFloat(qtdAplicar) * multiplicador).toFixed(2);
-    setQtdNutrienteA(res);
+  const dadosCorrecao = {
+    teorSolo: parseFloat(potassio),
+    fontePotassio: fontePotassio,
+    custoFontePotassio: parseFloat(custoFontePotassio),
+    participacaoAtual: (potassio * 100) / ctccmol / 100,
+    participacaoDesejada: parseFloat(participacaoDesejada) / 100,
   };
 
   const corrigir = () => {
-    if (fontePotassio === "1") {
-      setNutrienteA("");
-      setNutrienteB("");
-      calcularQtdAplicar(58);
-      calcularCustoHa(58);
-      calcularQtdNutrienteA(0);
-    } else if (fontePotassio === "2") {
-      setNutrienteA("Enxofre");
-      setNutrienteB("");
-      calcularQtdAplicar(52);
-      calcularCustoHa(52);
-      calcularQtdNutrienteA(0.17);
-    } else if (fontePotassio === "3") {
-      setNutrienteA("Enxofre");
-      setNutrienteB("Magnésio");
-      calcularQtdAplicar(22);
-      calcularCustoHa(22);
-      calcularQtdNutrienteA(0.22);
-    }
+    const headers = {
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json; charset=UTF-8",
+    };
+
+    axios
+      .post("http://localhost:8080/correcao/potassio", dadosCorrecao, {
+        headers: headers,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setQtdAplicar(res.data.qntAplicar.toFixed(2));
+        setCustoHa(res.data.custoHa.toFixed(2));
+
+        if (fontePotassio === "CLORETO_POTASSIO") {
+          setNutrienteA("");
+          setNutrienteB("");
+          setQtdNutrienteA(0);
+          setQtdNutrienteB(0);
+        } else if (fontePotassio === "SULFATO_POTASSIO") {
+          setNutrienteA("Enxofre");
+          setNutrienteB("");
+          setQtdNutrienteA(
+            res.data.nutrientesAdicionais[0].correcaoAdicional.toFixed(2)
+          );
+          setQtdNutrienteB(0);
+        } else if (fontePotassio === "SULFATO_POTASSIO_MAGNESIO") {
+          setNutrienteA("Enxofre");
+          setNutrienteB("Magnésio");
+          setQtdNutrienteA(
+            res.data.nutrientesAdicionais[0].correcaoAdicional.toFixed(2)
+          );
+          setQtdNutrienteB(
+            res.data.nutrientesAdicionais[1].correcaoAdicional.toFixed(2)
+          );
+        }
+      });
 
     const aposCorrecaoPotassio = (
-      (potassio * parseFloat(participacaoDesejadaPot)) /
+      (potassio * parseFloat(participacaoDesejada)) /
       participacaoAtual
     ).toFixed(2);
 
     dispatch({
       type: "CORRECAO",
+      aposCorrecaoFosforo: aposCorrecaoFosforo,
       aposCorrecaoPotassio: aposCorrecaoPotassio,
     });
 
@@ -127,8 +114,8 @@ export function CorrecaoPotassio() {
                 label="Participação do Potássio na CTC, desejada %"
                 type="number"
                 placeholder="Participação desejada na CTC"
-                value={participacaoDesejadaPot}
-                onChange={(e) => setParticipacaoDesejadaPot(e.target.value)}
+                value={participacaoDesejada}
+                onChange={(e) => setParticipacaoDesejada(e.target.value)}
               />
               <span>Participação ideal do Potássio na CTC: 3.0%</span>
             </Form>
@@ -144,9 +131,11 @@ export function CorrecaoPotassio() {
                   required
                 >
                   <option>Selecione uma Fonte de Potássio</option>
-                  <option value="1">Cloreto de Potássio</option>
-                  <option value="2">Superfosfato Triplo</option>
-                  <option value="3">Sulfato de Potássio/Magnésio </option>
+                  <option value="CLORETO_POTASSIO">Cloreto de Potássio</option>
+                  <option value="SULFATO_POTASSIO">Sulfato de Potássio</option>
+                  <option value="SULFATO_POTASSIO_MAGNESIO">
+                    Sulfato de Potássio/Magnésio
+                  </option>
                 </Form.Select>
               </Form.Group>
             </Form>
@@ -184,7 +173,7 @@ export function CorrecaoPotassio() {
               <Form.Label>
                 Participação do Potássio na CTC, após correção %
               </Form.Label>
-              <Form.Control value={participacaoDesejadaPot} disabled />
+              <Form.Control value={participacaoDesejada} disabled />
             </Form.Group>
           </Form>
           <Col>
@@ -213,7 +202,7 @@ export function CorrecaoPotassio() {
               <Form.Label>{nutrienteB}</Form.Label>
               <Form.Control value={qtdNutrienteB} disabled />
             </Form.Group>
-            {fontePotassio === "3" && (
+            {fontePotassio === "SULFATO_POTASSIO_MAGNESIO" && (
               <span style={{ color: "red" }}>
                 Atenção para o teor de Magnésio no solo
               </span>
