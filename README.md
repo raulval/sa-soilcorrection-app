@@ -3,6 +3,9 @@
 Esse projeto tem o intuito de integrar o [Front-End](https://github.com/raulval/sa-soilcorrection-gui) com o Back-End, que tem como base o repositório [Soil Correction](https://github.com/raulval/sa-soilcorrection) da disciplina de Arquitetura de Software UTFPR-CP. 
 O motivo para usar a arquitetura cliente-servidor foi a flexibilidade, a manutenabilidade e a escalabilidade que essa arquitetura traz.
 
+# Estrutura
+A arquitetura utilizada na parte de back-end foi a Spring Boot Flow, porém sem o banco de dados. Nessa estrutura o cliente faz uma requisição HTTP do tipo POST, a requisição vai para os controllers onde são mapeadas e então vai para a camada service, na service é onde acontece a parte lógica do projeto. Após isso os resultados são mapeados para a camada models e assim retornado para o usuário se não houver nenhum erro.
+
 
 # Tecnologias
 
@@ -32,7 +35,7 @@ A tela de dados é onde o usuário irá preencher os campos necessários para fa
     <img alt="Teores" title="Teores Screen" src="screenshots/teores.png" width=800 heigth=200 />
   </h1>
 
-Na tela de Teores é que o usuário coloca os dados necessários para a aplicação funcione corretamente. A escolha da textura do solo na tela de Dados impacta nos valores ideais. Após o usuário preencher todos os campos e clicar em salvar o valor de S cmol, CTC cmol e V% atual são calculados e os dados ficam salvos continuando na tela de Teores.
+Na tela de Teores é que o usuário coloca os dados necessários para a aplicação funcione corretamente. A escolha da textura do solo na tela de Dados impacta nos valores ideais. Após o usuário preencher todos os campos e clicar em salvar o valor de S cmol, CTC cmol, V% atual, M.O.% e Carbono são calculados e os dados ficam salvos continuando na tela de Teores.
 
 ---
 ### Tela de Correções
