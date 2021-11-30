@@ -25,7 +25,8 @@ export function CorrecaoFosforo() {
   const [nutrienteB, setNutrienteB] = useState();
 
   const dadosCorrecao = {
-    teorFosforo: parseFloat(teorFosforo) - fosforo,
+    fosforo: fosforo,
+    teorFosforo: parseFloat(teorFosforo),
     fonteFosforo: fonteFosforo,
     custoFonteFosforo: parseFloat(custoFonteFosforo),
     eficienciaFosforo: parseFloat(eficienciaFosforo),

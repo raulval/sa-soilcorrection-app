@@ -31,8 +31,8 @@ export function CorrecaoPotassio() {
     teorSolo: parseFloat(potassio),
     fontePotassio: fontePotassio,
     custoFontePotassio: parseFloat(custoFontePotassio),
-    participacaoAtual: (potassio * 100) / ctccmol / 100,
-    participacaoDesejada: parseFloat(participacaoDesejada) / 100,
+    participacaoAtual: (potassio * 100) / ctccmol,
+    participacaoDesejada: parseFloat(participacaoDesejada),
   };
 
   const corrigir = () => {
@@ -74,18 +74,15 @@ export function CorrecaoPotassio() {
             res.data.nutrientesAdicionais[1].correcaoAdicional.toFixed(2)
           );
         }
+
+        const aposCorrecaoPotassio = res.data.aposCorrecao.toFixed(2);
+
+        dispatch({
+          type: "CORRECAO",
+          aposCorrecaoFosforo: aposCorrecaoFosforo,
+          aposCorrecaoPotassio: aposCorrecaoPotassio,
+        });
       });
-
-    const aposCorrecaoPotassio = (
-      (potassio * parseFloat(participacaoDesejada)) /
-      participacaoAtual
-    ).toFixed(2);
-
-    dispatch({
-      type: "CORRECAO",
-      aposCorrecaoFosforo: aposCorrecaoFosforo,
-      aposCorrecaoPotassio: aposCorrecaoPotassio,
-    });
 
     // history.push("/teores");
   };

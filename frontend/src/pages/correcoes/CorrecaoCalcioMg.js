@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
@@ -9,20 +10,15 @@ export function CorrecaoCalcioMg() {
   const calcio = useSelector((state) => state.calcio);
   const magnesio = useSelector((state) => state.magnesio);
   const ctccmol = useSelector((state) => state.ctccmol);
+  const aposCorrecaoFosforo = useSelector((state) => state.aposCorrecaoFosforo);
+  const aposCorrecaoPotassio = useSelector(
+    (state) => state.aposCorrecaoPotassio
+  );
 
-  const participacaoAtualCal = (
-    (calcio / (ctccmol * 100)).toExponential(2).replace(/e\-[0-9]?/, "") * 10
-  ).toFixed(2);
+  const participacaoAtualCal = ((calcio * 100) / ctccmol).toFixed(2);
+  const participacaoAtualMg = ((magnesio * 100) / ctccmol).toFixed(2);
 
-  const participacaoAtualMg = (
-    (magnesio / (ctccmol * 100)).toExponential(2).replace(/e\-[0-9]?/, "") * 10
-  ).toFixed(2);
-
-  // const participacaoAposCal = (calcio + algumacoisa) / (ctccmol * 100);
-
-  // const participacaoAposMg = (magnesio + algumacoisa) / (ctccmol * 100);
-
-  const [participacaoDesejadaCal, setParticipacaoDesejadaCal] = useState();
+  const [participacaoDesejada, setParticipacaoDesejada] = useState();
   const [fonteCorretivo, setFonteCorretivo] = useState();
   const [custoFonteCalMg, setCustoFonteCalMg] = useState();
   const [qtdAplicar, setQtdAplicar] = useState();
@@ -34,7 +30,52 @@ export function CorrecaoCalcioMg() {
   const [nutrienteA, setNutrienteA] = useState();
   const [nutrienteB, setNutrienteB] = useState();
 
-  function corrigir() {}
+  const dadosCorrecao = {
+    teorSolo: parseFloat(calcio),
+    teorCao: parseFloat(teorCaO),
+    prnt: parseFloat(prnt),
+    fonteCalcioMagnesio: fonteCorretivo,
+    custoFonteCalMg: parseFloat(custoFonteCalMg),
+    participacaoAtual: (calcio * 100) / ctccmol,
+    participacaoDesejada: parseFloat(participacaoDesejada),
+  };
+
+  function corrigir() {
+    const headers = {
+      "Access-Control-Allow-Headers": "Content-Type",
+      "Access-Control-Allow-Methods": "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+      "Access-Control-Allow-Origin": "*",
+      "Content-Type": "application/json; charset=UTF-8",
+    };
+
+    axios
+      .post("http://localhost:8080/correcao/calciomagnesio", dadosCorrecao, {
+        headers: headers,
+      })
+      .then((res) => {
+        console.log(res.data);
+        setQtdAplicar(res.data.qntAplicar.toFixed(2));
+        setCustoHa(res.data.custoHa.toFixed(2));
+        if (fonteCorretivo === "GESSO_AGRICOLA") {
+          setNutrienteB("Enxofre");
+          setQtdNutrienteB(
+            res.data.nutrientesAdicionais[0].correcaoAdicional.toFixed(2)
+          );
+        }
+      })
+      .catch((error) => {
+        console.log(error.message);
+        return error;
+      });
+
+    // dispatch({
+    //   type: "CORRECAO",
+    //   aposCorrecaoFosforo: aposCorrecaoFosforo,
+    //   aposCorrecaoPotassio: aposCorrecaoPotassio,
+    //   aposCorrecaoCalcio: aposCorrecaoCalcio,
+    //   aposCorrecaoMagnesio: aposCorrecaoMagnesio,
+    // });
+  }
 
   return (
     <div id="page-correcao-calmg">
@@ -66,8 +107,8 @@ export function CorrecaoCalcioMg() {
                 label="Participação do Cálcio na CTC, desejada %"
                 type="number"
                 placeholder="Participação desejada na CTC"
-                value={participacaoDesejadaCal}
-                onChange={(e) => setParticipacaoDesejadaCal(e.target.value)}
+                value={participacaoDesejada}
+                onChange={(e) => setParticipacaoDesejada(e.target.value)}
               />
             </Form>
           </Container>
@@ -101,12 +142,16 @@ export function CorrecaoCalcioMg() {
                   required
                 >
                   <option>Selecione uma Fonte de Corretivo</option>
-                  <option value="1">Calcário Dolomítico</option>
-                  <option value="2">Calcário Calcítico</option>
-                  <option value="3">Calcário de Concha</option>
-                  <option value="4">Gesso Agrícola</option>
-                  <option value="5">Hidróxido de cálcio</option>
-                  <option value="6">Calcário Magnesiano</option>
+                  <option value="CALCARIO_DOLOMITICO">
+                    Calcário Dolomítico
+                  </option>
+                  <option value="CALCARIO_CALCITICO">Calcário Calcítico</option>
+                  <option value="CALCARIO_CONCHA">Calcário de Concha</option>
+                  <option value="GESSO_AGRICOLA">Gesso Agrícola</option>
+                  <option value="HIDROXIDO_CALCIO">Hidróxido de cálcio</option>
+                  <option value="CALCARIO_MAGNESIANO">
+                    Calcário Magnesiano
+                  </option>
                 </Form.Select>
               </Form.Group>
             </Form>
@@ -179,6 +224,17 @@ export function CorrecaoCalcioMg() {
               </Form.Group>
             </Form>
           </Col>
+          <Form>
+            <h4 style={{ marginTop: "30px" }}>
+              Essa correção de Fósforo, fornecerá também (kg/ha)
+            </h4>
+            <Form.Group>
+              <Form.Label>{nutrienteA}</Form.Label>
+              <Form.Control value={qtdNutrienteA} disabled />
+              <Form.Label>{nutrienteB}</Form.Label>
+              <Form.Control value={qtdNutrienteB} disabled />
+            </Form.Group>
+          </Form>
         </Row>
       </Container>
     </div>

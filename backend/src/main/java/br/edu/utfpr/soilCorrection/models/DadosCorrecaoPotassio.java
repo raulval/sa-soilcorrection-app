@@ -10,8 +10,8 @@ public class DadosCorrecaoPotassio {
     private final double teorSolo;
 
     public DadosCorrecaoPotassio(double participacaoAtual, double participacaoDesejada, FontePotassio fontePotassio, double custoFontePotassio, double teorSolo) {
-        this.participacaoAtual = participacaoAtual;
-        this.participacaoDesejada = participacaoDesejada;
+        this.participacaoAtual = participacaoAtual / 100;
+        this.participacaoDesejada = participacaoDesejada / 100;
         this.fontePotassio = fontePotassio;
         this.custoFontePotassio = custoFontePotassio;
         this.teorSolo = teorSolo;
